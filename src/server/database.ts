@@ -4,8 +4,6 @@ import { Logger } from './logger';
 
 const DB_URI = process.env.MONGODB_URI;
 if(!DB_URI && !process.env.NO_MONGO) {
-  const stack = new Error().stack;
-  Logger.error(stack);
   Logger.error('No env.MONGODB_URI set. Set one.');
   process.exit(0);
 }
