@@ -3,7 +3,6 @@ import { PartyManager } from '../helpers/party/party-manager';
 import { ItemCreator } from '../helpers/world/item-creator';
 import { TeleportHelper } from '../helpers/world/teleport-helper';
 import { Spawner } from '../base/Spawner';
-import { SubscriptionHelper } from '../helpers/account/subscription-helper';
 import { Client } from 'colyseus.js';
 import { NPC } from '../../shared/models/npc';
 import { Player } from '../../shared/models/player';
@@ -14,6 +13,7 @@ import { VisualEffect } from '../helpers/world/visual-effects';
 import { CombatEffect } from './GameWorld';
 import * as NRP from 'node-redis-pubsub';
 import Timer from '@gamestdio/timer';
+import { SubscriptionHelper } from '../helpers/account/subscription-helper';
 
 export interface World {
   // Room<T>

@@ -3,7 +3,7 @@ import { find, includes } from 'lodash';
 
 import { Command } from '../../../base/Command';
 import { Player } from '../../../../shared/models/player';
-import { SubscriptionHelper } from '../../../helpers/account/subscription-helper';
+import { SubscriptionHelperImplementation } from '../../../helpers/account/subscription-helper-implementation';
 
 export class GMRespawn extends Command {
 
@@ -11,7 +11,8 @@ export class GMRespawn extends Command {
   public format = 'LairName';
 
   async execute(player: Player, { room, args }) {
-    if(!SubscriptionHelper.isGM(player)) return;
+    const subscriptionHelper = new SubscriptionHelperImplementation();
+    if(!subscriptionHelper.isGM(player)) return;
     if(!args) return false;
 
     const spawner = find(room.allSpawners, checkSpawner => includes(checkSpawner.npcIds, args));

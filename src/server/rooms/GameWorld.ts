@@ -30,12 +30,13 @@ import { CharacterHelper } from '../helpers/character/character-helper';
 import { GroundHelper } from '../helpers/world/ground-helper';
 import { LockerHelper } from '../helpers/world/locker-helper';
 import { BankHelper } from '../helpers/character/bank-helper';
-import { SubscriptionHelper } from '../helpers/account/subscription-helper';
+import { SubscriptionHelperImplementation } from '../helpers/account/subscription-helper-implementation';
 import { PouchHelper } from '../helpers/character/pouch-helper';
 import { MoveHelper } from '../helpers/character/move-helper';
 import { TeleportHelper } from '../helpers/world/teleport-helper';
 import { Signal } from 'signals.js';
 import { World } from './World';
+import { SubscriptionHelper } from '../helpers/account/subscription-helper';
 
 export type CombatEffect = 'hit-min' | 'hit-mid' | 'hit-max' | 'hit-magic' | 'hit-heal' | 'hit-buff'
 | 'block-dodge' | 'block-armor' | 'block-shield' | 'block-weapon' | 'block-offhand' | 'block-miss';
@@ -152,7 +153,7 @@ export class GameWorld extends Room<GameState> implements World  {
   }
 
   get subscriptionHelper(): SubscriptionHelper {
-    return new SubscriptionHelper();
+    return new SubscriptionHelperImplementation();
   }
 
   // 2 teleports per map, essentially
@@ -289,7 +290,7 @@ export class GameWorld extends Room<GameState> implements World  {
     this.usernameClientHash[player.username] = { client };
 
 
-    if(this.mapSubscriberOnly && !SubscriptionHelper.isSubscribed(player)) {
+    if(this.mapSubscriberOnly && !this.subscriptionHelper.isSubscribed(player)) {
       player.sendClientMessage('Magical forces push you out of the rift!');
       await this.teleport(player, { newMap: 'Rylt', x: 68, y: 13 });
       return;
@@ -633,7 +634,7 @@ export class GameWorld extends Room<GameState> implements World  {
     if(item.sprite < 0) return;
 
     // drop items on destroy if they're supposed to, or if they're a tester.
-    if(item.destroyOnDrop || (ref.isPlayer && ref.isPlayer() && item.isOwnedBy(ref) && SubscriptionHelper.isTester(ref))) {
+    if(item.destroyOnDrop || (ref.isPlayer && ref.isPlayer() && item.isOwnedBy(ref) && this.subscriptionHelper.isTester(ref))) {
 
       // legacy code for legacy players :P
       if(item.name === 'Succor Blob' && item.succorInfo && ref.isPlayer && ref.isPlayer()) {

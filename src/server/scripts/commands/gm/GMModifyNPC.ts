@@ -3,7 +3,7 @@ import { Command } from '../../../base/Command';
 import { Player } from '../../../../shared/models/player';
 import { merge } from 'lodash';
 import { MessageHelper } from '../../../helpers/world/message-helper';
-import { SubscriptionHelper } from '../../../helpers/account/subscription-helper';
+import { SubscriptionHelperImplementation } from '../../../helpers/account/subscription-helper-implementation';
 
 export class GMModifyNPC extends Command {
 
@@ -11,7 +11,8 @@ export class GMModifyNPC extends Command {
   public format = 'Target Props...';
 
   async execute(player: Player, { args }) {
-    if(!SubscriptionHelper.isGM(player)) return;
+    const subscriptionHelper = new SubscriptionHelperImplementation();
+    if(!subscriptionHelper.isGM(player)) return;
 
     const [npcish, props] = args.split(' ', 2);
     const possTargets = MessageHelper.getPossibleMessageTargets(player, npcish);

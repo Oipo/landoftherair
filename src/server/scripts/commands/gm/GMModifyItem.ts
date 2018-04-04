@@ -2,7 +2,7 @@
 import { Command } from '../../../base/Command';
 import { Player } from '../../../../shared/models/player';
 import { merge } from 'lodash';
-import { SubscriptionHelper } from '../../../helpers/account/subscription-helper';
+import { SubscriptionHelperImplementation } from '../../../helpers/account/subscription-helper-implementation';
 
 export class GMModifyItem extends Command {
 
@@ -10,7 +10,8 @@ export class GMModifyItem extends Command {
   public format = 'Props...';
 
   async execute(player: Player, { args }) {
-    if(!SubscriptionHelper.isGM(player)) return;
+    const subscriptionHelper = new SubscriptionHelperImplementation();
+    if(!subscriptionHelper.isGM(player)) return;
 
     if(!player.rightHand) return player.sendClientMessage('Hold an item in your right hand to modify.');
 

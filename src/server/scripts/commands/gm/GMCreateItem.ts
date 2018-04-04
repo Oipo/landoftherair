@@ -1,7 +1,7 @@
 
 import { Command } from '../../../base/Command';
 import { Player } from '../../../../shared/models/player';
-import { SubscriptionHelper } from '../../../helpers/account/subscription-helper';
+import { SubscriptionHelperImplementation } from '../../../helpers/account/subscription-helper-implementation';
 
 export class GMCreateItem extends Command {
 
@@ -9,7 +9,8 @@ export class GMCreateItem extends Command {
   public format = 'ItemName';
 
   async execute(player: Player, { room, args }) {
-    if(!SubscriptionHelper.isGM(player)) return;
+    const subscriptionHelper = new SubscriptionHelperImplementation();
+    if(!subscriptionHelper.isGM(player)) return;
 
     const itemName = args;
     if(!itemName) return false;

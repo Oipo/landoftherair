@@ -3,7 +3,7 @@ import { Command } from '../../../base/Command';
 import { Player } from '../../../../shared/models/player';
 import { Item, EquippableItemClassesWithWeapons, ValidItemTypes } from '../../../../shared/models/item';
 import { includes } from 'lodash';
-import { SubscriptionHelper } from '../../../helpers/account/subscription-helper';
+import { SubscriptionHelperImplementation } from '../../../helpers/account/subscription-helper-implementation';
 
 export class GMForgeItem extends Command {
 
@@ -11,7 +11,8 @@ export class GMForgeItem extends Command {
   public format = 'Props...';
 
   async execute(player: Player, { args }) {
-    if(!SubscriptionHelper.isGM(player)) return;
+    const subscriptionHelper = new SubscriptionHelperImplementation();
+    if(!subscriptionHelper.isGM(player)) return;
 
     if(player.rightHand) return player.sendClientMessage('Empty your right hand first.');
 

@@ -1,10 +1,9 @@
-
-import { includes, truncate, capitalize, sampleSize } from 'lodash';
+import { capitalize, includes, sampleSize, truncate } from 'lodash';
 import { Player } from '../../../shared/models/player';
-import { ItemCreator } from '../world/item-creator';
 import { SkillClassNames } from '../../../shared/models/character';
 import { SkillHelper } from './skill-helper';
 import { MessageHelper } from '../world/message-helper';
+import { ItemCreator } from '../world/item-creator';
 
 export class CharacterCreator {
 

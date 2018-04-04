@@ -2,7 +2,7 @@
 import { Command } from '../../../base/Command';
 import { Player } from '../../../../shared/models/player';
 import { includes } from 'lodash';
-import { SubscriptionHelper } from '../../../helpers/account/subscription-helper';
+import { SubscriptionHelperImplementation } from '../../../helpers/account/subscription-helper-implementation';
 
 export class UpStairs extends Command {
 
@@ -26,7 +26,8 @@ export class UpStairs extends Command {
 
     const { teleportMap, teleportX, teleportY, requireParty, subscriberOnly } = stairs.properties;
 
-    if(subscriberOnly && !SubscriptionHelper.isSubscribed(player)) return player.sendClientMessage('You found an easter egg! Sadly, it\'s spoiled.');
+    const subscriptionHelper = new SubscriptionHelperImplementation();
+    if(subscriberOnly && !subscriptionHelper.isSubscribed(player)) return player.sendClientMessage('You found an easter egg! Sadly, it\'s spoiled.');
 
     if(requireParty && !player.party) return player.sendClientMessage('You must gather your party before venturing forth.');
 

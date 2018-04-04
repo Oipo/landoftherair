@@ -2,7 +2,7 @@
 import { MaterialSlot, ReverseValidItems, ValidMaterialItems } from '../../../shared/helpers/material-storage-layout';
 import { Item } from '../../../shared/models/item';
 import { Player } from '../../../shared/models/player';
-import { SubscriptionHelper } from '../account/subscription-helper';
+import { SubscriptionHelperImplementation } from '../account/subscription-helper-implementation';
 
 export class MaterialStorageHelper {
 
@@ -18,7 +18,8 @@ export class MaterialStorageHelper {
 
   // total size per stack is 200 + purchases gotten with silver
   static getTotalSizeAvailable(player: Player) {
-    return 200 + SubscriptionHelper.bonusMaterialStorageSlots(player);
+    const subscriptionHelper = new SubscriptionHelperImplementation();
+    return 200 + subscriptionHelper.bonusMaterialStorageSlots(player);
   }
 
   static withdrawItemFromSlot(player: Player, slot: MaterialSlot, count: number) {
