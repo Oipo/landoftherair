@@ -3,6 +3,7 @@ import { random, sample } from 'lodash';
 
 import { Skill } from '../../../../../base/Skill';
 import { Character } from '../../../../../../shared/models/character';
+import { Player } from '../../../../../../shared/models/player';
 
 export class DedlaenCryptThingPunch extends Skill {
 
@@ -20,7 +21,7 @@ export class DedlaenCryptThingPunch extends Skill {
     const allTeleportSpots = user.$$room.state.getDecorByName('CryptThing Spot');
 
     const spot = sample(allTeleportSpots);
-    user.$$room.teleport(target, { x: spot.x / 64, y: (spot.y / 64) - 1 });
+    user.$$room.teleport(<Player>target, { newMap: null, x: spot.x / 64, y: (spot.y / 64) - 1 });
   }
 
 }

@@ -772,7 +772,7 @@ export class CombatHelper {
     }
 
     if(attacker) {
-      attacker.$$room.combatEffect(attacker, `hit-${damage > 0 ? 'magic' : 'heal'}`, attacked.uuid);
+      attacker.$$room.combatEffect(attacker, (damage > 0 ? 'hit-magic' : 'hit-heal'), attacked.uuid);
     }
   }
 

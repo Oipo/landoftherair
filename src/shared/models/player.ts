@@ -23,6 +23,7 @@ import { Malnourished } from '../../server/effects/antibuffs/Malnourished';
 import { AlchemyContainer } from './container/tradeskills/alchemy';
 import { SpellforgingContainer } from './container/tradeskills/spellforging';
 import { MetalworkingContainer } from './container/tradeskills/metalworking';
+import { MessageHelper } from '../../server/helpers/world/message-helper';
 
 export class Player extends Character {
   @nonenumerable
@@ -115,6 +116,8 @@ export class Player extends Character {
   get allTraitLevels() {
     return cloneDeep(this.traitLevels);
   }
+
+  $$interceptor: Player;
 
   init() {
     this.loadAccountBonuses();
@@ -487,7 +490,7 @@ export class Player extends Character {
     this.sendClientMessage(`Quest >>> ${message}`);
   }
 
-  receiveMessage(from: Character, message) {
+  receiveMessage(from: Player, message) {
     from.sendClientMessage({ name: `[>>> private: ${this.name}]`, message });
     this.sendClientMessage({ name: `[<<< private: ${from.name}]`, message });
   }
@@ -787,6 +790,57 @@ export class Player extends Character {
     }
 
     super._gainSkill(type, val);
+  }
+
+  sendClientMessage(message) {
+    MessageHelper.sendClientMessage(this, message);
+
+    if(this.$$interceptor) {
+      MessageHelper.sendClientMessage(this.$$interceptor, message, this);
+    }
+  }
+
+  useItem(source: 'leftHand' | 'rightHand' | 'potionHand', fromApply = false) {
+    const item: Item = this[source];
+
+    if(item && item.succorInfo && this.$$room.state.isSuccorRestricted(this)) {
+      return this.sendClientMessage('You stop, unable to envision the place in your memory!');
+    }
+
+    if(!item || !item.use(this, fromApply)) return;
+
+    let remove = false;
+
+    if(item.itemClass === 'Bottle' && item.ounces === 0) {
+      this.sendClientMessage('The bottle was empty.');
+      remove = true;
+
+    } else if(item.ounces > 0) {
+      item.ounces--;
+      if(item.ounces <= 0) remove = true;
+    }
+
+    if(remove) {
+      this[source] = null;
+      this.recalculateStats();
+    }
+
+    if(item.succorInfo) {
+      this.doSuccor(item.succorInfo);
+    }
+  }
+
+  doSuccor(succorInfo) {
+    if(this.$$room.state.isSuccorRestricted(this)) return this.sendClientMessage('The blob turns to ash in your hand!');
+
+    this.sendClientMessage('You are whisked back to the place in your stored memories!');
+
+    this.$$room.teleport(this, {
+      x: succorInfo.x,
+      y: succorInfo.y,
+      newMap: succorInfo.map,
+      zSet: succorInfo.z
+    });
   }
 
 }

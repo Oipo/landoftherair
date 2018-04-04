@@ -3,7 +3,7 @@ import * as Cache from 'node-cache';
 
 import { DB } from '../../database';
 import { Item, Quality } from '../../../shared/models/item';
-import { GameWorld } from '../../rooms/GameWorld';
+import {World} from '../../rooms/World';
 
 import { random, sampleSize, sum, sample, isArray, isNumber } from 'lodash';
 
@@ -15,7 +15,7 @@ export class ItemCreator {
 
   private cache = new Cache({ stdTTL: 600 });
 
-  private rollStatsForItem(potentialItem, room?: GameWorld): Item {
+  private rollStatsForItem(potentialItem, room?: World): Item {
 
     if(potentialItem.trait) {
       if(isArray(potentialItem.trait.name)) {
@@ -71,7 +71,7 @@ export class ItemCreator {
     return potentialItem;
   }
 
-  async getItemByName(name: string, room?: GameWorld): Promise<Item> {
+  async getItemByName(name: string, room?: World): Promise<Item> {
 
     if(name === 'none') return Promise.resolve(null);
 

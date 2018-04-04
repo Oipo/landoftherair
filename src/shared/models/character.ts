@@ -27,6 +27,7 @@ import { MessageHelper } from '../../server/helpers/world/message-helper';
 import { TrapHelper } from '../../server/helpers/world/trap-helper';
 import { SkillHelper } from '../../server/helpers/character/skill-helper';
 import { XPHelper } from '../../server/helpers/character/xp-helper';
+import { World } from '../../server/rooms/World';
 
 export type Allegiance =
   'None'
@@ -239,7 +240,7 @@ export class Character {
   $$deathTicks: number;
 
   @nonenumerable
-  $$room: any;
+  $$room: World;
 
   @nonenumerable
   $$corpseRef: Item;
@@ -257,8 +258,6 @@ export class Character {
 
   @nonenumerable
   $$flaggedSkills;
-
-  $$interceptor: Character;
 
   sprite: number;
 
@@ -1103,58 +1102,13 @@ export class Character {
       || (this.hasHeldItem(item2, 'right') && this.hasHeldItem(item1, 'left'));
   }
 
-  useItem(source: 'leftHand' | 'rightHand' | 'potionHand', fromApply = false) {
-    const item: Item = this[source];
-
-    if(item && item.succorInfo && this.$$room.state.isSuccorRestricted(this)) {
-      return this.sendClientMessage('You stop, unable to envision the place in your memory!');
-    }
-
-    if(!item || !item.use(this, fromApply)) return;
-
-    let remove = false;
-
-    if(item.itemClass === 'Bottle' && item.ounces === 0) {
-      this.sendClientMessage('The bottle was empty.');
-      remove = true;
-
-    } else if(item.ounces > 0) {
-      item.ounces--;
-      if(item.ounces <= 0) remove = true;
-    }
-
-    if(remove) {
-      this[source] = null;
-      this.recalculateStats();
-    }
-
-    if(item.succorInfo) {
-      this.doSuccor(item.succorInfo);
-    }
-  }
-
-  doSuccor(succorInfo) {
-    if(this.$$room.state.isSuccorRestricted(this)) return this.sendClientMessage('The blob turns to ash in your hand!');
-
-    this.sendClientMessage('You are whisked back to the place in your stored memories!');
-
-    this.$$room.teleport(this, {
-      x: succorInfo.x,
-      y: succorInfo.y,
-      newMap: succorInfo.map,
-      zSet: succorInfo.z
-    });
-  }
+  useItem(source: 'leftHand' | 'rightHand' | 'potionHand', fromApply = false) {}
 
   receiveMessage(from, message) {}
 
   sendClientMessage(message) {
-    MessageHelper.sendClientMessage(this, message);
-
-    if(this.$$interceptor) {
-      MessageHelper.sendClientMessage(this.$$interceptor, message, this);
-    }
-  }
+    throw new Error('Function should be overridden in child class');
+  };
 
   sendClientMessageToRadius(message, radius = 4, except = [], useSight = false) {
     MessageHelper.sendClientMessageToRadius(this, message, radius, except, useSight);

@@ -40,14 +40,14 @@ export abstract class Command {
     return 'RightHand';
   }
 
-  addItemToContainer(player, container: Container, item: Item, index?: number) {
+  addItemToContainer(player: Player, container: Container, item: Item, index?: number) {
     if(!container) return player.sendClientMessage('Bad container name.');
     const didFail = container.addItem(item, index, { maxSize: MaterialStorageHelper.getTotalSizeAvailable(player) });
     if(didFail) return player.sendClientMessage(didFail);
     return true;
   }
 
-  checkMerchantDistance(player, merchantUUID) {
+  checkMerchantDistance(player: Player, merchantUUID) {
     const container = player.$$room.state.findNPC(merchantUUID);
     if(!container) return player.sendClientMessage('That person is not here.');
     if(container.distFrom(player) > 2) return player.sendClientMessage('That person is too far away.');

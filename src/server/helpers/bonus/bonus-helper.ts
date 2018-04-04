@@ -1,7 +1,7 @@
 
 import { extend } from 'lodash';
 
-import { GameWorld } from '../../rooms/GameWorld';
+import { World } from '../../rooms/World';
 
 export interface GameSettings {
   xpMult: number;
@@ -35,7 +35,7 @@ export class BonusHelper {
     return this.room.redisClient;
   }
 
-  constructor(private room: GameWorld) {
+  constructor(private room: World) {
 
     this.initListeners();
   }

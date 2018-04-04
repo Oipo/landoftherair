@@ -4,6 +4,7 @@ import { Character } from '../../../shared/models/character';
 import { VisualEffect } from './visual-effects';
 
 import { CensorSensor, CensorTier } from 'censor-sensor';
+import { Player } from '../../../shared/models/player';
 
 const censor = new CensorSensor();
 censor.disableTier(CensorTier.CommonProfanity);
@@ -24,7 +25,7 @@ export class MessageHelper {
     return censor.cleanProfanity(message || '');
   }
 
-  static sendClientMessage(char: Character, message, rootCharacter?: Character) {
+  static sendClientMessage(char: Player, message, rootCharacter?: Character) {
     if(!char.isPlayer()) return;
     char.$$room.sendPlayerLogMessage(char, this.cleanMessage(message), rootCharacter);
   }
@@ -77,7 +78,7 @@ export class MessageHelper {
 
   static getPossibleAuguryTargets(player: Character, findStr: string): any[] {
     // -1 is a special case that gets everything
-    const allTargets = player.$$room.state.getAllNPCsFromQuadtrees(player, -1);
+    const allTargets = player.$$room.state.getAllNPCsFromQuadtrees({x: player.x, y: player.y}, -1);
     const possTargets = allTargets.filter(target => {
       return this.doesTargetMatchSearch(target, findStr);
     });

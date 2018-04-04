@@ -357,22 +357,22 @@
             "requiresLearn": true
         },
         {
-            "name": "VitalEssence",
-            "macro": "cast vitalessence",
-            "icon": "bell-shield",
-            "color": "#0a0",
-            "mode": "clickToTarget",
-            "tooltipDesc": "Boost maximum vitality for a single target. Cost: 200 MP",
-            "isSystem": true,
-            "requiresLearn": true
-        },
-        {
             "name": "Vision",
             "macro": "cast vision",
             "icon": "evil-eyes",
             "color": "#0a0",
             "mode": "clickToTarget",
             "tooltipDesc": "Cure blindness on a single target. Cost: 10 MP",
+            "isSystem": true,
+            "requiresLearn": true
+        },
+        {
+            "name": "VitalEssence",
+            "macro": "cast vitalessence",
+            "icon": "bell-shield",
+            "color": "#0a0",
+            "mode": "clickToTarget",
+            "tooltipDesc": "Boost maximum vitality for a single target. Cost: 200 MP",
             "isSystem": true,
             "requiresLearn": true
         },
@@ -477,6 +477,16 @@
             "requiresLearn": true
         },
         {
+            "name": "IceMist",
+            "macro": "cast icemist",
+            "icon": "kaleidoscope-pearls",
+            "color": "#000080",
+            "mode": "clickToTarget",
+            "tooltipDesc": "Cast an area ice effect on a target (3x3). Cost: 35 MP",
+            "isSystem": true,
+            "requiresLearn": true
+        },
+        {
             "name": "ImbueEnergy",
             "macro": "cast imbueenergy",
             "icon": "magic-palm",
@@ -493,16 +503,6 @@
             "color": "#000",
             "mode": "clickToTarget",
             "tooltipDesc": "Become invisible to the average vision. Cost: 100 MP",
-            "isSystem": true,
-            "requiresLearn": true
-        },
-        {
-            "name": "IceMist",
-            "macro": "cast icemist",
-            "icon": "kaleidoscope-pearls",
-            "color": "#000080",
-            "mode": "clickToTarget",
-            "tooltipDesc": "Cast an area ice effect on a target (3x3). Cost: 35 MP",
             "isSystem": true,
             "requiresLearn": true
         },
@@ -740,18 +740,6 @@
             "requiresLearn": false
         },
         {
-            "name": "Rage Stance",
-            "macro": "stance rage",
-            "icon": "swords-power",
-            "color": "#fff",
-            "bgColor": "#000",
-            "mode": "autoActivate",
-            "tooltipDesc": "Become more offensive, but lose defensive power. Requires weapon skill 20 (Warrior).",
-            "requiresBaseClass": "Warrior",
-            "isSystem": true,
-            "requiresLearn": false
-        },
-        {
             "name": "Parry Stance",
             "macro": "stance parry",
             "icon": "surrounded-shield",
@@ -759,6 +747,18 @@
             "bgColor": "#000",
             "mode": "autoActivate",
             "tooltipDesc": "Become more defensive, but lose offensive power. Requires weapon skill 16 (Warrior).",
+            "requiresBaseClass": "Warrior",
+            "isSystem": true,
+            "requiresLearn": false
+        },
+        {
+            "name": "Rage Stance",
+            "macro": "stance rage",
+            "icon": "swords-power",
+            "color": "#fff",
+            "bgColor": "#000",
+            "mode": "autoActivate",
+            "tooltipDesc": "Become more offensive, but lose defensive power. Requires weapon skill 20 (Warrior).",
             "requiresBaseClass": "Warrior",
             "isSystem": true,
             "requiresLearn": false

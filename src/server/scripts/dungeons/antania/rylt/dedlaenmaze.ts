@@ -1,7 +1,7 @@
 
-import { GameWorld } from '../../../../rooms/GameWorld';
+import { World } from '../../../../rooms/World';
 
-export const events = async (room: GameWorld) => {
+export const events = async (room: World) => {
 
   const toggleDoors = (setTo: boolean) => {
     for(let i = 1; i <= 3; i++) {

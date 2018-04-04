@@ -1,5 +1,4 @@
-
-import { isObject, cloneDeep, find, get, set, clone, pull, extend } from 'lodash';
+import { clone, cloneDeep, extend, find, get, isObject, pull, set } from 'lodash';
 
 import { Parser } from 'mingy';
 
@@ -36,9 +35,10 @@ import { PouchHelper } from '../helpers/character/pouch-helper';
 import { MoveHelper } from '../helpers/character/move-helper';
 import { TeleportHelper } from '../helpers/world/teleport-helper';
 import { Signal } from 'signals.js';
+import { World } from './World';
 
 export type CombatEffect = 'hit-min' | 'hit-mid' | 'hit-max' | 'hit-magic' | 'hit-heal' | 'hit-buff'
-| 'block-dodge' | 'block-armor' | 'block-shield' | 'block-weapon' | 'block-offhand';
+| 'block-dodge' | 'block-armor' | 'block-shield' | 'block-weapon' | 'block-offhand' | 'block-miss';
 
 const TICK_TIMER = 1000;
 
@@ -56,13 +56,13 @@ const TickRatesPerTimer = {
   PlayerSave: 60
 };
 
-export class GameWorld extends Room<GameState> {
+export class GameWorld extends Room<GameState> implements World  {
 
   private allMapNames = {};
 
   private spawners: Spawner[] = [];
 
-  private dropTables = {
+  public dropTables = {
     region: [],
     map: []
   };
@@ -152,7 +152,7 @@ export class GameWorld extends Room<GameState> {
   }
 
   get subscriptionHelper(): SubscriptionHelper {
-    return SubscriptionHelper;
+    return new SubscriptionHelper();
   }
 
   // 2 teleports per map, essentially
@@ -531,7 +531,7 @@ export class GameWorld extends Room<GameState> {
 
   updateLocker(player: Player, locker: Locker) {
     LockerHelper.saveLocker(player, locker);
-    const client = player.$$room.findClient(player);
+    const client = this.findClient(player);
     if(!client) return;
 
     this.send(client, { action: 'update_locker', locker });
@@ -588,7 +588,7 @@ export class GameWorld extends Room<GameState> {
     this.updatePos(player);
   }
 
-  async teleport(player, opts: { newMap: string, x: number, y: number, zChange?: number, zSet?: number }) {
+  async teleport(player: Player, opts: { newMap: string, x: number, y: number, zChange?: number, zSet?: number }) {
 
     const { newMap, x, y, zChange, zSet } = opts;
 

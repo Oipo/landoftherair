@@ -158,7 +158,8 @@ export class GameState {
     }, {});
   }
 
-  isSuccorRestricted(player: Player): boolean {
+  // TODO refactor so that this function is not called from Character.ts
+  isSuccorRestricted(player: Character): boolean {
     const succorRegion = filter(this.map.layers[MapLayer.Succorport].objects, reg => this.isInRegion(player, reg))[0];
 
     return get(succorRegion, 'properties.restrictSuccor', false);
@@ -170,7 +171,7 @@ export class GameState {
     return get(teleRegion, 'properties.restrictTeleport', false);
   }
 
-  getSuccorRegion(player: Player): string {
+  getSuccorRegion(player: Character): string {
     const succorRegion: any = filter(this.map.layers[MapLayer.Succorport].objects, reg => this.isInRegion(player, reg))[0];
     const descRegion: any = filter(this.map.layers[MapLayer.RegionDescriptions].objects, reg => this.isInRegion(player, reg))[0];
 
@@ -254,16 +255,17 @@ export class GameState {
     this.quadtreeHelper.playerQuadtreeRemove(playerRef, { x: playerRef.x, y: playerRef.y });
   }
 
-  updateNPCInQuadtree(char: NPC, oldPos: any): void {
+  updateNPCInQuadtree(char: Character, oldPos: any): void {
     if(!oldPos) return;
     if(oldPos.x === char.x && oldPos.y === char.y) return;
 
     oldPos.uuid = char.uuid;
+    // TODO refactor this function and the player variant into one
     this.quadtreeHelper.npcQuadtreeRemove(char, oldPos);
     this.quadtreeHelper.npcQuadtreeInsert(char);
   }
 
-  updatePlayerInQuadtree(char: Player, oldPos: any): void {
+  updatePlayerInQuadtree(char: Character, oldPos: any): void {
     if(!oldPos) return;
     if(oldPos.x === char.x && oldPos.y === char.y) return;
 
@@ -369,11 +371,11 @@ export class GameState {
   /**
    * THIS FUNCTION GETS PLAYERS REGARDLESS OF SIGHT
    */
-  getAllPlayersInRange(ref: { x: number, y: number }, radius: number): Character[] {
+  getAllPlayersInRange(ref: { x: number, y: number }, radius: number): Player[] {
     return this.getAllPlayersFromQuadtrees(ref, radius);
   }
 
-  getPlayersInRange(ref: Character, radius, except: string[] = [], useSight = true): Character[] {
+  getPlayersInRange(ref: Character, radius, except: string[] = [], useSight = true): Player[] {
     return this.getAllPlayersFromQuadtrees(ref, radius)
       .filter(char => !char.isDead() && !includes(except, char.uuid) && this.isVisibleTo(ref, char, useSight));
   }
@@ -399,7 +401,7 @@ export class GameState {
   }
 
   // hostility check: order is important
-  private checkTargetForHostility(me: Character, target: Character): boolean {
+  checkTargetForHostility(me: Character, target: Character): boolean {
 
     // I can never be hostile to myself
     if(me === target) return false;
@@ -431,7 +433,7 @@ export class GameState {
     return false;
   }
 
-  private getAllNPCsFromQuadtrees(pos: { x: number, y: number }, radius: number): Character[] {
+  public getAllNPCsFromQuadtrees(pos: { x: number, y: number }, radius: number): Character[] {
     const foundNPCsInRange = radius >= 0 ? this.quadtreeHelper.npcQuadtreeSearch(pos, radius) : this.quadtreeHelper.npcs;
     const foundNPCRefs = foundNPCsInRange.map(npc => this.mapNPCs[npc.uuid]);
 
@@ -447,7 +449,7 @@ export class GameState {
     return compact(foundNPCRefs);
   }
 
-  private getAllPlayersFromQuadtrees(pos: { x: number, y: number }, radius: number): Character[] {
+  private getAllPlayersFromQuadtrees(pos: { x: number, y: number }, radius: number): Player[] {
     const foundPlayersInRange = this.quadtreeHelper.playerQuadtreeSearch(pos, radius);
     const foundPlayerRefs = foundPlayersInRange.map(player => this.maintainedPlayerHash[player.uuid]);
     return foundPlayerRefs;

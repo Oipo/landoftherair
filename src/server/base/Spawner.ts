@@ -9,7 +9,7 @@ import { RandomlyShouts } from '../scripts/npc/common-responses';
 import { LootHelper } from '../helpers/world/loot-helper';
 import { Dangerous } from '../effects/special/Dangerous';
 import { Attribute } from '../effects/augments/Attribute';
-import { GameWorld } from '../rooms/GameWorld';
+import { World } from '../rooms/World';
 
 export class Spawner {
 
@@ -66,7 +66,7 @@ export class Spawner {
   npcCreateCallback: Function;
   shouldBeActive = true;
 
-  constructor(private room: GameWorld, { x, y, map, name }, spawnOpts) {
+  constructor(private room: World, { x, y, map, name }, spawnOpts) {
     extend(this, spawnOpts);
 
     this.x = x;

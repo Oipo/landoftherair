@@ -1,7 +1,7 @@
 
 import { Player } from '../../../shared/models/player';
 import { Party, PartyPlayer } from '../../../shared/models/party';
-import { GameWorld } from '../../rooms/GameWorld';
+import { World } from '../../rooms/World';
 
 import { map, find, extend } from 'lodash';
 
@@ -13,7 +13,7 @@ export class PartyManager {
     return this.room.redisClient;
   }
 
-  constructor(private room: GameWorld) {
+  constructor(private room: World) {
 
     this.initListeners();
   }

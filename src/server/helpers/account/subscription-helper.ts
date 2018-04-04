@@ -306,37 +306,6 @@ export class SubscriptionHelper {
     return (tier * SUBSCRIPTION_TIER_MULTIPLER) / 100;
   }
 
-  // SUBSCRIBER BENEFIT: +(TIER * 5)% XP
-  public static modifyXPGainForSubscription(player: Player, xp: number): number {
-    if(xp < 0) return xp;
-
-    return Math.max(1, Math.floor(xp + (xp * this.subscriptionTierMultiplier(player))));
-  }
-
-  // SUBSCRIBER BENEFIT: +(TIER * 5)% SKILL
-  public static modifySkillGainForSubscription(player: Player, skill: number): number {
-    if(skill < 0) return skill;
-
-    return Math.max(1, Math.floor(skill + (skill * this.subscriptionTierMultiplier(player))));
-  }
-
-  // SUBSCRIBER BENEFIT: GAIN TRAITS (TIER * 5)% FASTER
-  public static modifyTraitPointTimerForSubscription(player: Player, timer: number): number {
-    return Math.floor(timer - (timer * this.subscriptionTierMultiplier(player)));
-  }
-
-  // SUBSCRIBER BENEFIT: +(TIER * 5)% PARTY XP
-  public static modifyPartyXPGainForSubscription(player: Player, xp: number): number {
-    if(xp < 0) return xp;
-
-    return Math.max(1, Math.floor(xp + (xp * this.subscriptionTierMultiplier(player))));
-  }
-
-  // SUBSCRIBER BENEFIT: +(TIER * 2) ACTION QUEUE ITEMS
-  public static calcActionQueueSize(player: Player): number {
-    return BASE_ACTION_QUEUE_SIZE + (this.subscriptionTier(player) * ACTION_QUEUE_MULTIPLIER);
-  }
-
   // SUBSCRIBER BENEFIT: +(TIER) POTION OZ
   public static calcPotionMaxSize(player: Player, basePotionSize: number): number {
     return basePotionSize + this.subscriptionTier(player) + (this.getSilverPurchase(player.$$account, 'MorePotions') * 5);
@@ -352,20 +321,50 @@ export class SubscriptionHelper {
     return Math.max(1, Math.floor(basePrice - (basePrice * this.subscriptionTierMultiplier(player))));
   }
 
-  public static bonusSackSlots(player: Player): number {
-    return this.getSilverPurchase(player.$$account, 'BiggerSack') * 5;
-  }
-
-  public static bonusBeltSlots(player: Player): number {
-    return this.getSilverPurchase(player.$$account, 'BiggerBelt') * 5;
-  }
-
-  public static bonusPouchSlots(player: Player): number {
-    return this.getSilverPurchase(player.$$account, 'MagicPouch') * 5;
-  }
-
   public static bonusMaterialStorageSlots(player: Player): number {
     return this.getSilverPurchase(player.$$account, 'ExpandedStorage') * 200;
   }
 
+  // SUBSCRIBER BENEFIT: +(TIER * 5)% XP
+  public modifyXPGainForSubscription(player: Player, xp: number): number {
+    if(xp < 0) return xp;
+
+    return Math.max(1, Math.floor(xp + (xp * SubscriptionHelper.subscriptionTierMultiplier(player))));
+  }
+
+  // SUBSCRIBER BENEFIT: +(TIER * 5)% SKILL
+  public modifySkillGainForSubscription(player: Player, skill: number): number {
+    if(skill < 0) return skill;
+
+    return Math.max(1, Math.floor(skill + (skill * SubscriptionHelper.subscriptionTierMultiplier(player))));
+  }
+
+  // SUBSCRIBER BENEFIT: GAIN TRAITS (TIER * 5)% FASTER
+  public modifyTraitPointTimerForSubscription(player: Player, timer: number): number {
+    return Math.floor(timer - (timer * SubscriptionHelper.subscriptionTierMultiplier(player)));
+  }
+
+  // SUBSCRIBER BENEFIT: +(TIER * 5)% PARTY XP
+  public modifyPartyXPGainForSubscription(player: Player, xp: number): number {
+    if(xp < 0) return xp;
+
+    return Math.max(1, Math.floor(xp + (xp * SubscriptionHelper.subscriptionTierMultiplier(player))));
+  }
+
+  // SUBSCRIBER BENEFIT: +(TIER * 2) ACTION QUEUE ITEMS
+  public calcActionQueueSize(player: Player): number {
+    return BASE_ACTION_QUEUE_SIZE + (SubscriptionHelper.subscriptionTier(player) * ACTION_QUEUE_MULTIPLIER);
+  }
+
+  public bonusSackSlots(player: Player): number {
+    return SubscriptionHelper.getSilverPurchase(player.$$account, 'BiggerSack') * 5;
+  }
+
+  public bonusBeltSlots(player: Player): number {
+    return SubscriptionHelper.getSilverPurchase(player.$$account, 'BiggerBelt') * 5;
+  }
+
+  public bonusPouchSlots(player: Player): number {
+    return SubscriptionHelper.getSilverPurchase(player.$$account, 'MagicPouch') * 5;
+  }
 }

@@ -1,7 +1,7 @@
 
 import { Player } from '../../../shared/models/player';
 import { DB } from '../../database';
-import { GameWorld } from '../../rooms/GameWorld';
+import { World } from '../../rooms/World';
 
 import { truncate, find } from 'lodash';
 
@@ -14,7 +14,7 @@ export class TeleportHelper {
     }, { multi: true });
   }
 
-  constructor(private room: GameWorld) {}
+  constructor(private room: World) {}
 
   private cannotTeleport(player: Player): boolean {
     return player.$$room.state.isTeleportRestricted(player);
@@ -128,7 +128,7 @@ export class TeleportHelper {
     }
 
     player.hp.set(1);
-    const teleportees = player.$$room.state.getAllInRange(player, 0);
+    const teleportees = player.$$room.state.getAllPlayersInRange(player, 0);
     teleportees.forEach(target => {
       this.doPlayerTeleport(target, teleportLocation.teleport);
     });

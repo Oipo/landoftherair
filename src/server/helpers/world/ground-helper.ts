@@ -5,7 +5,7 @@ import { Item } from '../../../shared/models/item';
 
 import { compact, reject, find } from 'lodash';
 import { DB } from '../../database';
-import { GameWorld } from '../../rooms/GameWorld';
+import { World} from '../../rooms/World';
 
 export class GroundHelper {
 
@@ -15,7 +15,7 @@ export class GroundHelper {
     return this.itemGCArray.length;
   }
 
-  constructor(private room: GameWorld) {}
+  constructor(private room: World) {}
 
   addItemToGround(ref, item: Item, previouslyStackedItem = null) {
 

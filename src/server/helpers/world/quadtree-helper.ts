@@ -1,7 +1,5 @@
 
 import * as RBush from 'rbush';
-import { NPC } from '../../../shared/models/npc';
-import { Player } from '../../../shared/models/player';
 import { Character } from '../../../shared/models/character';
 
 export class QuadtreeHelper {
@@ -36,7 +34,7 @@ export class QuadtreeHelper {
     bush.insert(data);
   }
 
-  npcQuadtreeInsert(npc: NPC): void {
+  npcQuadtreeInsert(npc: Character): void {
     this._quadtreeInsert(this.npcBush, {
       minX: npc.x,
       minY: npc.y,
@@ -46,7 +44,7 @@ export class QuadtreeHelper {
     });
   }
 
-  playerQuadtreeInsert(player: Player): void {
+  playerQuadtreeInsert(player: Character): void {
     this._quadtreeInsert(this.playerBush, {
       minX: player.x,
       minY: player.y,
@@ -70,11 +68,11 @@ export class QuadtreeHelper {
     });
   }
 
-  npcQuadtreeRemove(npc: NPC, oldPos: { x: number, y: number }): void {
+  npcQuadtreeRemove(npc: Character, oldPos: { x: number, y: number }): void {
     this._quadtreeRemove(this.npcBush, npc, oldPos);
   }
 
-  playerQuadtreeRemove(player: Player, oldPos: { x: number, y: number }): void {
+  playerQuadtreeRemove(player: Character, oldPos: { x: number, y: number }): void {
     this._quadtreeRemove(this.playerBush, player, oldPos);
   }
 
